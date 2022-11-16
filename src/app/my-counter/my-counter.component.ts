@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, interval, combineLatest } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import {
   increment,
   decrement,
@@ -24,6 +24,21 @@ export class MyCounterComponent {
     }>
   ) {
     this.count$ = store.select('count').pipe(map((gS) => gS.counterValue));
+
+    const api2$ = interval(1000).pipe(filter((s) => s < 1000));
+
+    const api2ValueMultiplyByCount$ = combineLatest([this.count$, api2$]).pipe(
+      tap((res) => {
+        console.warn(`value from count: ${res[0]}`);
+        console.warn(`value from api2: ${res[1]}`);
+      }),
+      map((res) => res[0] * res[1]),
+      filter((s) => s < 300)
+    );
+
+    // api2ValueMultiplyByCount$.subscribe((s) =>
+    //   console.warn(`mulitiplied value: ${s}`)
+    // );
   }
 
   increment() {
