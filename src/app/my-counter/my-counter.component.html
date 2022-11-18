@@ -1,3 +1,13 @@
+<div
+  *ngIf="countValueAbouve20$ | async as countValueAbouve20"
+  style="color:red"
+>
+  {{ countValueAbouve20 }}
+</div>
+
+<div *ngIf="numberFromParentPlusCountFromStore$ | async as valueFromParent">
+  {{ valueFromParent }}
+</div>
 <button id="increment" (click)="increment()">Increment</button>
 
 <div>Current Count: {{ count$ | async }}</div>
